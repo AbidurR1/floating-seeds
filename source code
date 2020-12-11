@@ -1,0 +1,152 @@
+color[] colors = {
+  color(58, 62, 59),
+  color(234, 78, 91),
+  color(247, 240, 220),
+  color(36, 172, 180),
+  color(178, 204, 185),
+  color(456,256,47),
+  color(145,374,263)
+};
+
+color H() {
+  return colors[(int) random(colors.length)];
+}
+
+
+int number = 75;
+Ellipses[] J;
+
+void setup() {
+  size(1000,1000);
+  P();
+  color C = lerpColor(T, Y, A);
+  background(C);
+  J = new Ellipses[number];
+  for (int i = 0; i < number; i++) {
+    J[i] = new Ellipses();
+  }
+  
+  {
+  size(1000,1000);
+  noStroke();
+  noiseDetail(2, 0.6);
+  circles = new ArrayList<Ellipses>();
+  for (int x = -blockSize; x <= (width*4); x += blockSize) {
+    for (int y = -blockSize; y <= height; y += blockSize);
+  }
+}
+  
+}
+
+float A = 0;
+color T;
+color Y;
+int G = 0;
+int R = 1;
+int stop = 60;
+
+void P() {
+  A = 0;
+  stop = 60;
+  R = (R + 1) % colors.length;
+  G = (G + 1) % colors.length;
+  Y = colors[R];
+  T = colors[G];
+}
+
+void draw() {
+  if (A > 1) {
+    P();
+  } else {
+    if (stop > 0) {
+      stop -= 1;
+    } else {
+      A += 0.004;
+    }
+  }
+  color new1 = lerpColor(T, Y, A);
+  background(new1);
+  
+  for (int i = 0; i < number; i++) {
+    Ellipses b = J[i];
+    if (b.isAlive()) {
+      b.update();
+      b.display();
+    } else {
+      Ellipses E = new Ellipses();
+      E.display();
+      J[i] = E;
+    }
+  }
+  if (frameCount < 3700) {
+   
+  }
+ 
+}
+
+class Ellipses {
+  PVector Move;
+  float x, P, Q;
+  int v, s;
+  color r;
+  
+  Ellipses() {
+    this.x = random(1, 18);
+    this.Q = random(0, 360);
+    this.v = width/10;
+    this.s = v/4;
+    this.Move = new PVector(random(-width/2, -v), random(-(v*3),height+(v*3)));
+    this.P = random(1, 5);
+    this.r = H();
+  }
+  
+  boolean isAlive() {
+    return Move.x < (width + v);
+  }
+
+  void update() {
+    Move.x += x;
+    Q += P;
+  }
+  
+  void display() {
+    strokeWeight(2);
+    stroke(0);
+    fill(r);
+    pushMatrix();
+    translate(Move.x, Move.y);
+    rotate(radians(Q));
+    translate(-v/2, -s/2);
+    ellipse(0,0,v,s);
+    drawFlow(random(255),s,0);  
+    popMatrix();
+    
+  }
+}
+int blockSize = 35;
+
+ArrayList<Ellipses> circles;
+
+float time = 0;
+float increment = 0.03;
+int screenTranslation = 0;
+
+
+//////////////////////////////
+int getRandomColor(){
+  return color(random(255),random(255));
+}
+
+void drawFlow(float x, float y, float circles){
+  strokeWeight(circles);
+  stroke(getRandomColor());
+  
+  translate(x,y);
+  for(int i=0; i<10; i++){
+    rotate(TWO_PI/10);
+    line(0.5,0.6,3*circles,0);
+  }
+  strokeWeight(0);
+  fill(getRandomColor());
+  ellipse(0,0,1.5*circles,1.5*circles);
+}
